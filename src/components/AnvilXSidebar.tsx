@@ -8,25 +8,28 @@ import {
   ChevronLeft
 } from "lucide-react";
 import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 interface SidebarItem {
   icon: React.ElementType;
   label: string;
-  active?: boolean;
+  path: string;
 }
 
 const sidebarItems: SidebarItem[] = [
-  { icon: LayoutDashboard, label: "Overview", active: true },
-  { icon: Users, label: "Accounts" },
-  { icon: Blocks, label: "Blocks" },
-  { icon: ArrowRightLeft, label: "Transactions" },
-  { icon: FileCode, label: "Contracts" },
-  { icon: Wrench, label: "Tools" },
+  { icon: LayoutDashboard, label: "Overview", path: "/" },
+  { icon: Users, label: "Accounts", path: "/accounts" },
+  { icon: Blocks, label: "Blocks", path: "/blocks" },
+  { icon: ArrowRightLeft, label: "Transactions", path: "/transactions" },
+  { icon: FileCode, label: "Contracts", path: "/contracts" },
+  { icon: Wrench, label: "Tools", path: "/tools" },
 ];
 
 const AnvilXSidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   return (
     <div className={`bg-card border-r border-border transition-all duration-300 flex flex-col ${collapsed ? 'w-16' : 'w-64'}`}>
@@ -45,22 +48,26 @@ const AnvilXSidebar = () => {
 
       {/* Navigation Items */}
       <nav className="flex-1 p-4 space-y-2">
-        {sidebarItems.map((item) => (
-          <Button
-            key={item.label}
-            variant={item.active ? "secondary" : "ghost"}
-            className={`w-full justify-start h-11 ${
-              item.active 
-                ? 'bg-primary/10 text-primary border border-primary/20' 
-                : 'hover:bg-secondary/80'
-            }`}
-          >
-            <item.icon className="h-5 w-5" />
-            {!collapsed && (
-              <span className="ml-3 font-medium">{item.label}</span>
-            )}
-          </Button>
-        ))}
+        {sidebarItems.map((item) => {
+          const isActive = location.pathname === item.path;
+          return (
+            <Button
+              key={item.label}
+              variant={isActive ? "secondary" : "ghost"}
+              className={`w-full justify-start h-11 transition-all duration-200 ${
+                isActive 
+                  ? 'bg-primary/10 text-primary border border-primary/20 shadow-sm' 
+                  : 'hover:bg-secondary/80'
+              }`}
+              onClick={() => navigate(item.path)}
+            >
+              <item.icon className="h-5 w-5" />
+              {!collapsed && (
+                <span className="ml-3 font-medium">{item.label}</span>
+              )}
+            </Button>
+          );
+        })}
       </nav>
 
       {/* Footer */}
