@@ -2,41 +2,65 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+/* AnvilX Design System - Premium Ethereum Dashboard 
+Inspired by modern dev tools like Vercel, Linear, Tenderly
 All colors MUST be HSL.
 */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 248 251% 98%;
+    --foreground: 219 14% 15%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 219 14% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 219 14% 15%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 251 91% 64%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 219 14% 25%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 219 13% 50%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 220 14% 96%;
+    --accent-foreground: 219 14% 15%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 251 91% 64%;
 
-    --radius: 0.5rem;
+    --radius: 1rem;
+
+    /* Custom gradients for AnvilX */
+    --gradient-purple-orange: linear-gradient(135deg, hsl(281 100% 72%) 0%, hsl(38 100% 72%) 100%);
+    --gradient-blue-cyan: linear-gradient(135deg, hsl(210 100% 72%) 0%, hsl(186 100% 69%) 100%);
+    --gradient-subtle: linear-gradient(135deg, hsl(220 14% 99%) 0%, hsl(220 14% 95%) 100%);
+
+    /* Ethereum theme colors */
+    --eth-primary: 219 100% 66%;
+    --eth-secondary: 186 100% 69%;
+    --success: 142 71% 45%;
+    --warning: 38 92% 50%;
+    --info: 210 100% 72%;
+
+    /* Status indicators */
+    --status-online: 142 71% 45%;
+    --status-offline: 0 84% 60%;
+    --status-pending: 38 92% 50%;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.05);
+    --shadow-md: 0 4px 6px -1px hsl(0 0% 0% / 0.1), 0 2px 4px -2px hsl(0 0% 0% / 0.1);
+    --shadow-lg: 0 10px 15px -3px hsl(0 0% 0% / 0.1), 0 4px 6px -4px hsl(0 0% 0% / 0.1);
+    --shadow-xl: 0 20px 25px -5px hsl(0 0% 0% / 0.1), 0 8px 10px -6px hsl(0 0% 0% / 0.1);
 
     --sidebar-background: 0 0% 98%;
 
@@ -100,6 +124,52 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-inter;
+  }
+
+  /* Custom component styles */
+  .gradient-card-purple {
+    background: var(--gradient-purple-orange);
+  }
+
+  .gradient-card-blue {
+    background: var(--gradient-blue-cyan);
+  }
+
+  .gradient-subtle {
+    background: var(--gradient-subtle);
+  }
+
+  .shadow-premium {
+    box-shadow: var(--shadow-lg);
+  }
+
+  .hover-lift {
+    transition: all 0.2s ease-in-out;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-xl);
+  }
+
+  .status-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .status-online {
+    background-color: hsl(var(--status-online));
+  }
+
+  .status-offline {
+    background-color: hsl(var(--status-offline));
+  }
+
+  .status-pending {
+    background-color: hsl(var(--status-pending));
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
 }
