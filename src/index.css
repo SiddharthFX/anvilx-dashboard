@@ -39,21 +39,10 @@ All colors MUST be HSL.
 
     --radius: 1rem;
 
-    /* Glassmorphism design tokens */
-    --glass-bg: 255 255 255 / 0.1;
-    --glass-border: 255 255 255 / 0.2;
-    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-    --glass-backdrop-blur: blur(8px);
-    
-    /* Premium gradients for glassmorphism */
-    --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-    --gradient-primary-glass: linear-gradient(135deg, rgba(126, 87, 255, 0.8) 0%, rgba(255, 154, 0, 0.6) 100%);
-    --gradient-card-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
-    --gradient-nav-glass: linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.6) 100%);
-    
-    /* Enhanced shadows for depth */
-    --shadow-glass: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-    --shadow-glass-hover: 0 15px 40px 0 rgba(31, 38, 135, 0.5);
+    /* Custom gradients for AnvilX */
+    --gradient-purple-orange: linear-gradient(135deg, hsl(281 100% 72%) 0%, hsl(38 100% 72%) 100%);
+    --gradient-blue-cyan: linear-gradient(135deg, hsl(210 100% 72%) 0%, hsl(186 100% 69%) 100%);
+    --gradient-subtle: linear-gradient(135deg, hsl(220 14% 99%) 0%, hsl(220 14% 95%) 100%);
 
     /* Ethereum theme colors */
     --eth-primary: 219 100% 66%;
@@ -118,12 +107,6 @@ All colors MUST be HSL.
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
-    
-    /* Dark mode glassmorphism */
-    --glass-bg: 0 0 0 / 0.2;
-    --glass-border: 255 255 255 / 0.1;
-    --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.03) 100%);
-    --gradient-nav-glass: linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.6) 100%);
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -142,49 +125,32 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground font-inter;
-    background: linear-gradient(135deg, hsl(248 100% 97%) 0%, hsl(240 100% 98%) 50%, hsl(250 100% 97%) 100%);
-    min-height: 100vh;
   }
 
-  /* Glassmorphism component styles */
-  .glass-card {
-    background: var(--gradient-glass);
-    backdrop-filter: var(--glass-backdrop-blur);
-    -webkit-backdrop-filter: var(--glass-backdrop-blur);
-    border: 1px solid rgba(var(--glass-border));
-    box-shadow: var(--shadow-glass);
+  /* Custom component styles */
+  .gradient-card-purple {
+    background: var(--gradient-purple-orange);
   }
 
-  .glass-nav {
-    background: var(--gradient-nav-glass);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(var(--glass-border));
+  .gradient-card-blue {
+    background: var(--gradient-blue-cyan);
   }
 
-  .glass-sidebar {
-    background: var(--gradient-glass);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border-right: 1px solid rgba(var(--glass-border));
+  .gradient-subtle {
+    background: var(--gradient-subtle);
   }
 
-  .glass-primary {
-    background: var(--gradient-primary-glass);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(126, 87, 255, 0.3);
+  .shadow-premium {
+    box-shadow: var(--shadow-lg);
   }
 
-  .hover-glass {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  .hover-lift {
+    transition: all 0.2s ease-in-out;
   }
 
-  .hover-glass:hover {
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: var(--shadow-glass-hover);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-xl);
   }
 
   .status-indicator {

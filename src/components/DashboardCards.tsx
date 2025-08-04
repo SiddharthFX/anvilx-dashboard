@@ -13,8 +13,8 @@ interface MetricCardProps {
 const MetricCard = ({ title, value, subtext, icon: Icon, gradient = false, trend }: MetricCardProps) => {
   return (
     <Card 
-      className={`p-8 hover-glass cursor-pointer ${
-        gradient ? 'glass-primary text-white border-0' : 'glass-card'
+      className={`p-6 hover-lift cursor-pointer transition-all duration-200 ${
+        gradient ? 'gradient-card-purple text-white border-0' : 'bg-card shadow-premium'
       }`}
     >
       <div className="flex items-center justify-between mb-4">

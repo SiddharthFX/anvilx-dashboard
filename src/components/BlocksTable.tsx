@@ -62,8 +62,8 @@ const mockBlocks: Block[] = [
 
 const BlocksTable = () => {
   return (
-    <Card className="glass-card hover-glass">
-      <div className="p-6 border-b border-white/10">
+    <Card className="shadow-premium hover-lift">
+      <div className="p-6 border-b border-border">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-xl font-semibold font-space-grotesk text-foreground">
@@ -73,7 +73,7 @@ const BlocksTable = () => {
               Recent blocks on the Ethereum network
             </p>
           </div>
-          <Button variant="outline" size="sm" className="glass-card hover:glass-primary transition-all duration-300">
+          <Button variant="outline" size="sm" className="hover:bg-secondary">
             View All Blocks
             <ExternalLink className="ml-2 h-4 w-4" />
           </Button>
@@ -83,25 +83,25 @@ const BlocksTable = () => {
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr className="border-b border-white/10">
-              <th className="text-left p-4 text-sm font-semibold text-foreground">Block</th>
-              <th className="text-left p-4 text-sm font-semibold text-foreground">
+            <tr className="border-b border-border">
+              <th className="text-left p-4 text-sm font-medium text-muted-foreground">Block</th>
+              <th className="text-left p-4 text-sm font-medium text-muted-foreground">
                 <div className="flex items-center gap-2">
                   <Clock className="h-4 w-4" />
                   Age
                 </div>
               </th>
-              <th className="text-left p-4 text-sm font-semibold text-foreground">Txns</th>
-              <th className="text-left p-4 text-sm font-semibold text-foreground">Miner</th>
-              <th className="text-left p-4 text-sm font-semibold text-foreground">Gas Used</th>
-              <th className="text-left p-4 text-sm font-semibold text-foreground">Hash</th>
+              <th className="text-left p-4 text-sm font-medium text-muted-foreground">Txns</th>
+              <th className="text-left p-4 text-sm font-medium text-muted-foreground">Miner</th>
+              <th className="text-left p-4 text-sm font-medium text-muted-foreground">Gas Used</th>
+              <th className="text-left p-4 text-sm font-medium text-muted-foreground">Hash</th>
             </tr>
           </thead>
           <tbody>
             {mockBlocks.map((block) => (
               <tr 
                 key={block.number} 
-                className="border-b border-white/5 hover:bg-white/10 transition-all duration-300 cursor-pointer backdrop-blur-sm"
+                className="border-b border-border hover:bg-secondary/50 transition-colors cursor-pointer"
               >
                 <td className="p-4">
                   <div className="font-mono text-sm font-medium text-primary">
