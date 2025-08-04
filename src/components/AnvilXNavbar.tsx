@@ -4,11 +4,11 @@ import { Input } from "@/components/ui/input";
 
 const AnvilXNavbar = () => {
   return (
-    <nav className="h-16 bg-card border-b border-border flex items-center justify-between px-6 shadow-sm">
+    <nav className="h-16 glass-nav flex items-center justify-between px-6 sticky top-0 z-50">
       {/* Logo and App Name */}
       <div className="flex items-center gap-3">
-        <div className="w-8 h-8 bg-gradient-card-purple rounded-lg flex items-center justify-center">
-          <span className="text-white font-bold text-sm">A</span>
+        <div className="w-10 h-10 glass-primary rounded-xl flex items-center justify-center shadow-lg">
+          <span className="text-white font-bold text-lg">A</span>
         </div>
         <h1 className="text-xl font-space-grotesk font-semibold text-foreground">
           AnvilX
@@ -24,7 +24,7 @@ const AnvilXNavbar = () => {
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input 
             placeholder="Search transactions, blocks, addresses..." 
-            className="pl-10 bg-secondary/50 border-border focus:ring-primary/20"
+            className="pl-10 glass-card border-white/20 focus:ring-primary/30 backdrop-blur-md"
           />
         </div>
       </div>
@@ -32,22 +32,22 @@ const AnvilXNavbar = () => {
       {/* Network Status & Actions */}
       <div className="flex items-center gap-4">
         {/* Network Status */}
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-success/10 border border-success/20">
+        <div className="flex items-center gap-2 px-4 py-2 rounded-xl glass-card border border-success/30">
           <span className="status-indicator status-online"></span>
           <span className="text-sm font-medium text-success">Connected</span>
-          <span className="text-xs text-muted-foreground">Mainnet</span>
+          <span className="text-xs text-muted-foreground">Anvil Local</span>
         </div>
 
         {/* Action Buttons */}
-        <Button variant="ghost" size="sm" className="h-9 w-9">
+        <Button variant="ghost" size="sm" className="h-10 w-10 glass-card hover:glass-primary transition-all duration-300">
           <Bell className="h-4 w-4" />
         </Button>
         
-        <Button variant="ghost" size="sm" className="h-9 w-9">
+        <Button variant="ghost" size="sm" className="h-10 w-10 glass-card hover:glass-primary transition-all duration-300">
           <Settings className="h-4 w-4" />
         </Button>
 
-        <Button variant="ghost" size="sm" className="h-9 w-9">
+        <Button variant="ghost" size="sm" className="h-10 w-10 glass-card hover:glass-primary transition-all duration-300">
           <User className="h-4 w-4" />
         </Button>
       </div>

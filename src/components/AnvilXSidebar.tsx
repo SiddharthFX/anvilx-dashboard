@@ -32,17 +32,17 @@ const AnvilXSidebar = () => {
   const navigate = useNavigate();
 
   return (
-    <div className={`bg-card border-r border-border transition-all duration-300 flex flex-col ${collapsed ? 'w-16' : 'w-64'}`}>
+    <div className={`glass-sidebar transition-all duration-300 flex flex-col ${collapsed ? 'w-16' : 'w-64'}`}>
       {/* Collapse Toggle */}
-      <div className="p-4 border-b border-border">
+      <div className="p-4 border-b border-white/10">
         <Button
           variant="ghost"
           size="sm"
           onClick={() => setCollapsed(!collapsed)}
-          className="w-full justify-start"
+          className="w-full justify-start glass-card hover:glass-primary transition-all duration-300"
         >
           <ChevronLeft className={`h-4 w-4 transition-transform ${collapsed ? 'rotate-180' : ''}`} />
-          {!collapsed && <span className="ml-2 text-sm">Collapse</span>}
+          {!collapsed && <span className="ml-2 text-sm font-medium">Collapse</span>}
         </Button>
       </div>
 
@@ -53,11 +53,11 @@ const AnvilXSidebar = () => {
           return (
             <Button
               key={item.label}
-              variant={isActive ? "secondary" : "ghost"}
-              className={`w-full justify-start h-11 transition-all duration-200 ${
+              variant="ghost"
+              className={`w-full justify-start h-12 transition-all duration-300 mb-2 ${
                 isActive 
-                  ? 'bg-primary/10 text-primary border border-primary/20 shadow-sm' 
-                  : 'hover:bg-secondary/80'
+                  ? 'glass-primary text-white shadow-lg scale-105' 
+                  : 'glass-card hover:glass-primary hover:scale-105'
               }`}
               onClick={() => navigate(item.path)}
             >
@@ -72,11 +72,13 @@ const AnvilXSidebar = () => {
 
       {/* Footer */}
       {!collapsed && (
-        <div className="p-4 border-t border-border">
-          <div className="text-xs text-muted-foreground">
-            <p className="font-medium">Node Info</p>
-            <p>Local Development</p>
-            <p>Version 2.14.1</p>
+        <div className="p-4 border-t border-white/10">
+          <div className="glass-card p-3 rounded-xl">
+            <div className="text-xs text-muted-foreground space-y-1">
+              <p className="font-semibold text-foreground">Node Info</p>
+              <p>Foundry Anvil</p>
+              <p className="text-primary">Version 0.2.0</p>
+            </div>
           </div>
         </div>
       )}
