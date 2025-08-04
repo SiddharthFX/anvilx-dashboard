@@ -1,5 +1,6 @@
 import { Card } from "@/components/ui/card";
-import { TrendingUp, Users, Layers, Fuel } from "lucide-react";
+import { TrendingUp, Users, Layers, Fuel, WifiOff } from "lucide-react";
+import { useAnvil } from "@/contexts/AnvilContext";
 
 interface MetricCardProps {
   title: string;
@@ -42,37 +43,67 @@ const MetricCard = ({ title, value, subtext, icon: Icon, gradient = false, trend
 };
 
 const DashboardCards = () => {
+  const { state } = useAnvil();
+
+  if (!state.isConnected) {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <Card className="p-6 bg-card/50 border-dashed">
+          <div className="flex items-center justify-center h-24">
+            <div className="text-center">
+              <WifiOff className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+              <p className="text-sm text-muted-foreground">Not connected to Anvil</p>
+            </div>
+          </div>
+        </Card>
+        <Card className="p-6 bg-card/50 border-dashed">
+          <div className="flex items-center justify-center h-24">
+            <p className="text-sm text-muted-foreground">Connect to view metrics</p>
+          </div>
+        </Card>
+        <Card className="p-6 bg-card/50 border-dashed">
+          <div className="flex items-center justify-center h-24">
+            <p className="text-sm text-muted-foreground">Connect to view metrics</p>
+          </div>
+        </Card>
+        <Card className="p-6 bg-card/50 border-dashed">
+          <div className="flex items-center justify-center h-24">
+            <p className="text-sm text-muted-foreground">Connect to view metrics</p>
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       <MetricCard
         title="Current Block"
-        value="18,429,571"
+        value={state.network?.blockNumber.toLocaleString() || "0"}
         subtext="Latest block height"
         icon={Layers}
         gradient={true}
-        trend="+0.2%"
       />
       
       <MetricCard
         title="Chain ID"
-        value="1"
-        subtext="Ethereum Mainnet"
+        value={state.network?.chainId.toString() || "31337"}
+        subtext={state.network?.name || "Anvil Local"}
         icon={TrendingUp}
       />
       
       <MetricCard
         title="Accounts"
-        value="10"
-        subtext="Local accounts available"
+        value={state.accounts.length.toString()}
+        subtext="Pre-funded accounts"
         icon={Users}
       />
       
       <MetricCard
         title="Gas Price"
-        value="23.4"
+        value={parseFloat(state.network?.gasPrice || "0").toFixed(1)}
         subtext="Gwei average"
         icon={Fuel}
-        trend="-5.2%"
       />
     </div>
   );
