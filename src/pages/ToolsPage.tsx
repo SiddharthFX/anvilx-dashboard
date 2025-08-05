@@ -250,7 +250,7 @@ const ToolsPage = () => {
       <div className="flex">
         <AnvilXSidebar />
         
-        <main className="flex-1 p-8 space-y-8">
+        <main className="flex-1 ml-64 p-8 space-y-8">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold font-space-grotesk text-foreground">

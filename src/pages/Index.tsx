@@ -15,7 +15,7 @@ const Index = () => {
         <AnvilXSidebar />
         
         {/* Main Content */}
-        <main className="flex-1 p-8 space-y-8">
+        <main className="flex-1 ml-64 p-8 space-y-8">
           {/* Header Section */}
           <div className="flex items-center justify-between">
             <div>

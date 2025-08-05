@@ -54,6 +54,14 @@ All colors MUST be HSL.
     --status-offline: 0 84% 60%;
     --status-pending: 38 92% 50%;
 
+    /* Professional icon colors */
+    --icon-blue: 217 91% 60%;
+    --icon-green: 142 76% 36%;
+    --icon-purple: 263 70% 50%;
+    --icon-orange: 25 95% 53%;
+    --icon-red: 0 84% 60%;
+    --icon-teal: 173 80% 40%;
+
     /* Shadows */
     --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
     --shadow-premium: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
@@ -176,5 +184,30 @@ All colors MUST be HSL.
   .status-pending {
     background-color: hsl(var(--status-pending));
     animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  /* Professional icon colors */
+  .icon-blue {
+    color: hsl(var(--icon-blue));
+  }
+  
+  .icon-green {
+    color: hsl(var(--icon-green));
+  }
+  
+  .icon-purple {
+    color: hsl(var(--icon-purple));
+  }
+  
+  .icon-orange {
+    color: hsl(var(--icon-orange));
+  }
+  
+  .icon-red {
+    color: hsl(var(--icon-red));
+  }
+  
+  .icon-teal {
+    color: hsl(var(--icon-teal));
   }
 }

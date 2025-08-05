@@ -12,14 +12,24 @@ interface MetricCardProps {
 }
 
 const MetricCard = ({ title, value, subtext, icon: Icon, gradient = false, trend }: MetricCardProps) => {
+  const getIconColor = () => {
+    switch (title) {
+      case 'Current Block': return 'icon-blue';
+      case 'Chain ID': return 'icon-green';
+      case 'Accounts': return 'icon-purple';
+      case 'Gas Price': return 'icon-orange';
+      default: return 'icon-teal';
+    }
+  };
+
   return (
     <Card 
       className="p-6 glass-card shadow-glass hover-lift cursor-pointer transition-all duration-300"
     >
       <div className="flex items-center justify-between mb-4">
-        <Icon className="h-6 w-6 text-foreground" />
+        <Icon className={`h-6 w-6 ${getIconColor()}`} />
         {trend && (
-          <span className="text-sm font-medium text-success">
+          <span className="text-sm font-medium text-[hsl(var(--status-online))]">
             {trend}
           </span>
         )}

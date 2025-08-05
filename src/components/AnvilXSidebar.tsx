@@ -31,8 +31,13 @@ const AnvilXSidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const getIconColor = (index: number) => {
+    const colors = ['icon-blue', 'icon-green', 'icon-purple', 'icon-orange', 'icon-red', 'icon-teal'];
+    return colors[index % colors.length];
+  };
+
   return (
-    <div className={`glass-card border-r border-border/50 transition-all duration-300 flex flex-col ${collapsed ? 'w-16' : 'w-64'}`}>
+    <div className={`glass-card border-r border-border/50 transition-all duration-300 flex flex-col h-screen fixed left-0 top-0 z-10 ${collapsed ? 'w-16' : 'w-64'}`}>
       {/* Collapse Toggle */}
       <div className="p-4 border-b border-border/50">
         <Button
@@ -48,7 +53,7 @@ const AnvilXSidebar = () => {
 
       {/* Navigation Items */}
       <nav className="flex-1 p-4 space-y-2">
-        {sidebarItems.map((item) => {
+        {sidebarItems.map((item, index) => {
           const isActive = location.pathname === item.path;
           return (
             <Button
@@ -61,7 +66,7 @@ const AnvilXSidebar = () => {
               }`}
               onClick={() => navigate(item.path)}
             >
-              <item.icon className="h-5 w-5" />
+              <item.icon className={`h-5 w-5 ${getIconColor(index)}`} />
               {!collapsed && (
                 <span className="ml-3 font-medium">{item.label}</span>
               )}
