@@ -32,9 +32,9 @@ const AnvilXSidebar = () => {
   const navigate = useNavigate();
 
   return (
-    <div className={`bg-card border-r border-border transition-all duration-300 flex flex-col ${collapsed ? 'w-16' : 'w-64'}`}>
+    <div className={`glass-card border-r border-border/50 transition-all duration-300 flex flex-col ${collapsed ? 'w-16' : 'w-64'}`}>
       {/* Collapse Toggle */}
-      <div className="p-4 border-b border-border">
+      <div className="p-4 border-b border-border/50">
         <Button
           variant="ghost"
           size="sm"
@@ -56,8 +56,8 @@ const AnvilXSidebar = () => {
               variant={isActive ? "secondary" : "ghost"}
               className={`w-full justify-start h-11 transition-all duration-200 ${
                 isActive 
-                  ? 'bg-primary/10 text-primary border border-primary/20 shadow-sm' 
-                  : 'hover:bg-secondary/80'
+                  ? 'bg-foreground/10 text-foreground border border-foreground/20' 
+                  : 'hover:bg-muted/50'
               }`}
               onClick={() => navigate(item.path)}
             >
@@ -72,11 +72,10 @@ const AnvilXSidebar = () => {
 
       {/* Footer */}
       {!collapsed && (
-        <div className="p-4 border-t border-border">
+        <div className="p-4 border-t border-border/50">
           <div className="text-xs text-muted-foreground">
-            <p className="font-medium">Node Info</p>
-            <p>Local Development</p>
-            <p>Version 2.14.1</p>
+            <p className="font-medium font-mono">AnvilX</p>
+            <p>Foundry Monitor</p>
           </div>
         </div>
       )}

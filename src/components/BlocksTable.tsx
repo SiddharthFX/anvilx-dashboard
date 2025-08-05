@@ -28,24 +28,24 @@ const BlocksTable = () => {
 
   if (!state.isConnected) {
     return (
-      <Card className="shadow-premium">
-        <div className="p-6 border-b border-border">
+      <Card className="glass-card shadow-glass">
+        <div className="p-6 border-b border-border/50">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-xl font-semibold font-space-grotesk text-foreground">
+              <h2 className="text-xl font-semibold font-mono text-foreground">
                 Latest Blocks
               </h2>
               <p className="text-sm text-muted-foreground mt-1">
-                Recent blocks on your Anvil node
+                Recent blocks on your node
               </p>
             </div>
           </div>
         </div>
         <div className="p-12 text-center">
           <WifiOff className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-          <p className="text-muted-foreground">Not connected to Anvil node</p>
+          <p className="text-muted-foreground">Not connected to node</p>
           <p className="text-sm text-muted-foreground mt-1">
-            Connect to your local node to view blocks
+            Connect to view blocks
           </p>
         </div>
       </Card>
@@ -53,15 +53,15 @@ const BlocksTable = () => {
   }
 
   return (
-    <Card className="shadow-premium hover-lift">
-      <div className="p-6 border-b border-border">
+    <Card className="glass-card shadow-glass hover-lift">
+      <div className="p-6 border-b border-border/50">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-semibold font-space-grotesk text-foreground">
+            <h2 className="text-xl font-semibold font-mono text-foreground">
               Latest Blocks
             </h2>
             <p className="text-sm text-muted-foreground mt-1">
-              Recent blocks on your Anvil node
+              Recent blocks on your node
             </p>
           </div>
           <div className="flex gap-2">

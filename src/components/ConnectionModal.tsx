@@ -121,46 +121,38 @@ const ConnectionModal = () => {
             </Card>
           </div>
 
-          {/* Quick Presets */}
+          {/* Node Presets */}
           <div className="space-y-3">
-            <Label className="text-sm font-medium">Quick Presets</Label>
-            <div className="grid grid-cols-2 gap-2">
+            <Label className="text-sm font-medium">Node Options</Label>
+            <div className="grid grid-cols-1 gap-2">
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => setLocalRpcUrl("http://127.0.0.1:8545")}
-                className="text-xs"
+                className="text-xs justify-start"
                 disabled={state.isConnecting}
               >
-                Anvil Default
+                Foundry Anvil (Default)
               </Button>
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setLocalRpcUrl("http://127.0.0.1:7545")}
-                className="text-xs"
+                onClick={() => setLocalRpcUrl("http://127.0.0.1:8011")}
+                className="text-xs justify-start"
                 disabled={state.isConnecting}
               >
-                Ganache
+                Foundry Anvil zkSync
               </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setLocalRpcUrl("http://127.0.0.1:9545")}
-                className="text-xs"
-                disabled={state.isConnecting}
-              >
-                Hardhat
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setLocalRpcUrl("http://127.0.0.1:3334")}
-                className="text-xs"
-                disabled={state.isConnecting}
-              >
-                Custom
-              </Button>
+              <div className="space-y-2">
+                <Input
+                  placeholder="https://eth-mainnet.g.alchemy.com/v2/YOUR-API-KEY"
+                  value={localRpcUrl.startsWith('https://eth-mainnet.g.alchemy.com') ? localRpcUrl : ''}
+                  onChange={(e) => setLocalRpcUrl(e.target.value)}
+                  className="text-xs"
+                  disabled={state.isConnecting}
+                />
+                <p className="text-xs text-muted-foreground">Alchemy Node RPC URL</p>
+              </div>
             </div>
           </div>
 

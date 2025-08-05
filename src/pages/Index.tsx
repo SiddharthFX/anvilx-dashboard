@@ -19,11 +19,11 @@ const Index = () => {
           {/* Header Section */}
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold font-space-grotesk text-foreground">
-                Dashboard Overview
+              <h1 className="text-3xl font-bold font-mono text-foreground">
+                AnvilX Dashboard
               </h1>
               <p className="text-muted-foreground mt-1">
-                Monitor your Ethereum node performance and blockchain data
+                Foundry Anvil Node Monitor
               </p>
             </div>
             <ConnectionModal />

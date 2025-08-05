@@ -14,27 +14,25 @@ interface MetricCardProps {
 const MetricCard = ({ title, value, subtext, icon: Icon, gradient = false, trend }: MetricCardProps) => {
   return (
     <Card 
-      className={`p-6 hover-lift cursor-pointer transition-all duration-200 ${
-        gradient ? 'gradient-card-purple text-white border-0' : 'bg-card shadow-premium'
-      }`}
+      className="p-6 glass-card shadow-glass hover-lift cursor-pointer transition-all duration-300"
     >
       <div className="flex items-center justify-between mb-4">
-        <Icon className={`h-6 w-6 ${gradient ? 'text-white/90' : 'text-primary'}`} />
+        <Icon className="h-6 w-6 text-foreground" />
         {trend && (
-          <span className={`text-sm font-medium ${gradient ? 'text-white/80' : 'text-success'}`}>
+          <span className="text-sm font-medium text-success">
             {trend}
           </span>
         )}
       </div>
       
       <div className="space-y-2">
-        <h3 className={`text-sm font-medium ${gradient ? 'text-white/80' : 'text-muted-foreground'}`}>
+        <h3 className="text-sm font-medium text-muted-foreground">
           {title}
         </h3>
-        <p className={`text-3xl font-bold font-space-grotesk ${gradient ? 'text-white' : 'text-foreground'}`}>
+        <p className="text-3xl font-bold font-mono text-foreground">
           {value}
         </p>
-        <p className={`text-sm ${gradient ? 'text-white/70' : 'text-muted-foreground'}`}>
+        <p className="text-sm text-muted-foreground">
           {subtext}
         </p>
       </div>
@@ -48,25 +46,25 @@ const DashboardCards = () => {
   if (!state.isConnected) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="p-6 bg-card/50 border-dashed">
+        <Card className="p-6 glass-card border-dashed border-muted/30">
           <div className="flex items-center justify-center h-24">
             <div className="text-center">
               <WifiOff className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
-              <p className="text-sm text-muted-foreground">Not connected to Anvil</p>
+              <p className="text-sm text-muted-foreground">Not connected</p>
             </div>
           </div>
         </Card>
-        <Card className="p-6 bg-card/50 border-dashed">
+        <Card className="p-6 glass-card border-dashed border-muted/30">
           <div className="flex items-center justify-center h-24">
             <p className="text-sm text-muted-foreground">Connect to view metrics</p>
           </div>
         </Card>
-        <Card className="p-6 bg-card/50 border-dashed">
+        <Card className="p-6 glass-card border-dashed border-muted/30">
           <div className="flex items-center justify-center h-24">
             <p className="text-sm text-muted-foreground">Connect to view metrics</p>
           </div>
         </Card>
-        <Card className="p-6 bg-card/50 border-dashed">
+        <Card className="p-6 glass-card border-dashed border-muted/30">
           <div className="flex items-center justify-center h-24">
             <p className="text-sm text-muted-foreground">Connect to view metrics</p>
           </div>
