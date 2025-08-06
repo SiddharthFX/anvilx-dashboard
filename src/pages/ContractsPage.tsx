@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Search, FileCode, Eye, Copy, ExternalLink } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { useAnvil } from "@/contexts/AnvilContext";
 
 // Sample deployed contracts on Anvil
 const deployedContracts = [
@@ -59,8 +60,19 @@ const deployedContracts = [
 
 const ContractsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [contracts] = useState(deployedContracts);
+  const [contracts, setContracts] = useState<any[]>([]);
   const { toast } = useToast();
+  const { state } = useAnvil();
+  const isConnected = state.isConnected;
+
+  // For now, show sample contracts when connected
+  useEffect(() => {
+    if (isConnected) {
+      setContracts(deployedContracts);
+    } else {
+      setContracts([]);
+    }
+  }, [isConnected]);
 
   const filteredContracts = contracts.filter(contract => 
     contract.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -89,7 +101,7 @@ const ContractsPage = () => {
       <div className="flex">
         <AnvilXSidebar />
         
-        <main className="flex-1 ml-64 p-8 space-y-8">
+        <main className="flex-1 transition-all duration-300 p-8 space-y-8" style={{ marginLeft: 'var(--sidebar-width, 256px)' }}>
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold font-space-grotesk text-foreground">
@@ -99,51 +111,64 @@ const ContractsPage = () => {
                 Deployed contracts on your Anvil node
               </p>
             </div>
-            <Button className="bg-primary hover:bg-primary/90">
-              <FileCode className="mr-2 h-4 w-4" />
-              Deploy Contract
-            </Button>
+            <div className="flex gap-3">
+              <Button 
+                variant="outline" 
+                className="glass-card border-border/50"
+                onClick={() => toast({ title: "Coming Soon", description: "Contract verification feature is in development" })}
+              >
+                <Eye className="mr-2 h-4 w-4" />
+                Verify Contract
+              </Button>
+              <Button 
+                className="bg-primary hover:bg-primary/90 text-primary-foreground"
+                onClick={() => toast({ title: "Coming Soon", description: "Contract deployment feature is in development" })}
+              >
+                <FileCode className="mr-2 h-4 w-4" />
+                Deploy Contract
+              </Button>
+            </div>
           </div>
 
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card className="p-6 gradient-card-purple text-white border-0">
+            <Card className="p-6 glass-card shadow-glass hover-lift">
               <div className="flex items-center gap-3">
-                <FileCode className="h-8 w-8 text-white/90" />
+                <FileCode className="h-8 w-8 icon-purple" />
                 <div>
-                  <p className="text-white/80 text-sm font-medium">Total Contracts</p>
-                  <p className="text-2xl font-bold font-space-grotesk">{stats.total}</p>
+                  <p className="text-muted-foreground text-sm font-medium">Total Contracts</p>
+                  <p className="text-2xl font-bold font-mono text-foreground">{stats.total}</p>
                 </div>
               </div>
             </Card>
             
-            <Card className="p-6 bg-card shadow-premium">
+            <Card className="p-6 glass-card shadow-glass hover-lift">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-success/20 flex items-center justify-center">
-                  <span className="text-success text-lg">✓</span>
+                <div className="w-8 h-8 rounded-full bg-green-500/10 flex items-center justify-center">
+                  <span className="text-green-500 text-lg">✓</span>
                 </div>
                 <div>
                   <p className="text-muted-foreground text-sm font-medium">Verified</p>
-                  <p className="text-2xl font-bold font-space-grotesk text-foreground">{stats.verified}</p>
+                  <p className="text-2xl font-bold font-mono text-foreground">{stats.verified}</p>
                 </div>
               </div>
             </Card>
             
-            <Card className="p-6 bg-card shadow-premium">
+            <Card className="p-6 glass-card shadow-glass hover-lift">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-warning/20 flex items-center justify-center">
-                  <span className="text-warning text-lg">?</span>
+                <div className="w-8 h-8 rounded-full bg-orange-500/10 flex items-center justify-center">
+                  <span className="text-orange-500 text-lg">?</span>
                 </div>
                 <div>
                   <p className="text-muted-foreground text-sm font-medium">Unverified</p>
-                  <p className="text-2xl font-bold font-space-grotesk text-foreground">{stats.unverified}</p>
+                  <p className="text-2xl font-bold font-mono text-foreground">{stats.unverified}</p>
                 </div>
               </div>
             </Card>
           </div>
 
           {/* Search */}
-          <Card className="p-6">
+          <Card className="p-6 glass-card shadow-glass">
             <div className="flex items-center gap-4">
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -151,17 +176,34 @@ const ContractsPage = () => {
                   placeholder="Search by contract address, name, or type..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
+                  className="pl-10 glass-accent border-border/50"
                 />
               </div>
-              <Button variant="outline">
+              <Button variant="outline" className="glass-accent border-border/50">
                 Filter by Type
               </Button>
             </div>
           </Card>
 
-          {/* Contracts Table */}
-          <Card>
+          {!isConnected ? (
+            <Card className="p-12 glass-card shadow-glass text-center">
+              <FileCode className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-foreground mb-2">No Connection</h3>
+              <p className="text-muted-foreground">
+                Connect to your Anvil node to view deployed contracts
+              </p>
+            </Card>
+          ) : contracts.length === 0 ? (
+            <Card className="p-12 glass-card shadow-glass text-center">
+              <FileCode className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-foreground mb-2">No Contracts Found</h3>
+              <p className="text-muted-foreground">
+                No contract deployments detected on this network
+              </p>
+            </Card>
+          ) : (
+            /* Contracts Table */
+            <Card className="glass-card shadow-glass">
             <div className="p-6 border-b border-border">
               <h2 className="text-xl font-semibold font-space-grotesk">Deployed Contracts</h2>
               <p className="text-muted-foreground text-sm mt-1">
@@ -244,7 +286,8 @@ const ContractsPage = () => {
                 </TableBody>
               </Table>
             </div>
-          </Card>
+            </Card>
+          )}
         </main>
       </div>
     </div>

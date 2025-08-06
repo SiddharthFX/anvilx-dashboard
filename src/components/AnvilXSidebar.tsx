@@ -8,6 +8,7 @@ import {
   ChevronLeft
 } from "lucide-react";
 import { useState } from "react";
+import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
@@ -36,8 +37,13 @@ const AnvilXSidebar = () => {
     return colors[index % colors.length];
   };
 
+  // Update CSS variable for main content margin
+  React.useEffect(() => {
+    document.documentElement.style.setProperty('--sidebar-width', collapsed ? '64px' : '256px');
+  }, [collapsed]);
+
   return (
-    <div className={`glass-card border-r border-border/50 transition-all duration-300 flex flex-col h-screen fixed left-0 top-0 z-10 ${collapsed ? 'w-16' : 'w-64'}`}>
+    <div className={`glass-card border-r border-border/50 transition-all duration-300 flex flex-col h-screen fixed left-0 top-0 z-50 shadow-glass ${collapsed ? 'w-16' : 'w-64'}`}>
       {/* Collapse Toggle */}
       <div className="p-4 border-b border-border/50">
         <Button
