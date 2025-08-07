@@ -4,9 +4,13 @@ import DashboardCards from "@/components/DashboardCards";
 import BlocksTable from "@/components/BlocksTable";
 import ConnectionModal from "@/components/ConnectionModal";
 
+import { useAnvil } from "@/contexts/AnvilContext";
+
 const Index = () => {
+  const { state } = useAnvil();
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[hsl(var(--dashboard-bg))]">
       {/* Navigation */}
       <AnvilXNavbar />
       
@@ -15,80 +19,94 @@ const Index = () => {
         <AnvilXSidebar />
         
         {/* Main Content */}
-        <main className="flex-1 transition-all duration-300 p-8 space-y-8" style={{ marginLeft: 'var(--sidebar-width, 256px)' }}>
-          {/* Welcome Header */}
-          <div className="mb-8">
-            <h1 className="text-4xl font-bold text-foreground mb-2">
-              Welcome to AnvilX
-            </h1>
-            <p className="text-lg text-muted-foreground">
-              Foundry Anvil Node Monitor & Analytics Dashboard
-            </p>
-          </div>
-
-          {/* Connection Status & Actions */}
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex gap-3">
-              <div className="px-4 py-2 bg-accent/20 text-accent-foreground rounded-full text-sm font-medium">
-                Node Monitor
-              </div>
-              <div className="px-4 py-2 bg-secondary/50 text-secondary-foreground rounded-full text-sm font-medium">
-                Real-time Data
-              </div>
-            </div>
-            <ConnectionModal />
-          </div>
-
-          {/* Metrics Grid */}
-          <DashboardCards />
-
-          {/* Main Content Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Latest Blocks - Takes 2 columns */}
-            <div className="lg:col-span-2">
-              <BlocksTable />
-            </div>
-            
-            {/* Quick Actions Panel */}
-            <div className="space-y-6">
-              <div className="modern-card p-6">
-                <h3 className="text-lg font-semibold text-foreground mb-4">Quick Actions</h3>
-                <div className="space-y-3">
-                  <button className="w-full p-3 text-left bg-accent/10 hover:bg-accent/20 rounded-xl transition-colors">
-                    <div className="text-sm font-medium text-foreground">Deploy Contract</div>
-                    <div className="text-xs text-muted-foreground">Deploy smart contracts</div>
-                  </button>
-                  <button className="w-full p-3 text-left bg-secondary/30 hover:bg-secondary/40 rounded-xl transition-colors">
-                    <div className="text-sm font-medium text-foreground">Send Transaction</div>
-                    <div className="text-xs text-muted-foreground">Execute transactions</div>
-                  </button>
-                  <button className="w-full p-3 text-left bg-primary/5 hover:bg-primary/10 rounded-xl transition-colors">
-                    <div className="text-sm font-medium text-foreground">View Accounts</div>
-                    <div className="text-xs text-muted-foreground">Manage wallets</div>
-                  </button>
+        <main className="flex-1 transition-all duration-300 p-8 space-y-8 animate-fade-in" style={{ marginLeft: 'var(--sidebar-width, 256px)' }}>
+          {/* Welcome Section */}
+          <div className="space-y-6">
+            <div className="modern-card p-8 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-hsl(var(--dashboard-accent))/10 to-transparent rounded-full blur-3xl"></div>
+              <div className="relative z-10">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h1 className="text-4xl font-bold text-gradient mb-2">
+                      Welcome to AnvilX
+                    </h1>
+                    <p className="text-muted-foreground text-lg">
+                      Your premium Foundry Anvil node monitor
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className={`status-indicator ${state.isConnected ? 'status-online' : 'status-offline'}`}></div>
+                    <span className="text-sm font-medium">
+                      {state.isConnected ? 'Connected' : 'Disconnected'}
+                    </span>
+                    <ConnectionModal />
+                  </div>
                 </div>
-              </div>
-
-              <div className="modern-card p-6">
-                <h3 className="text-lg font-semibold text-foreground mb-4">Network Status</h3>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">Connection</span>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                      <span className="text-sm font-medium">Online</span>
+                
+                {/* Quick Stats */}
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <div className="glass-accent p-4 rounded-xl">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-lg bg-hsl(var(--dashboard-accent))/10 flex items-center justify-center">
+                        <span className="text-[hsl(var(--dashboard-accent))] text-xl">⚡</span>
+                      </div>
+                      <div>
+                        <p className="text-2xl font-bold font-mono">{state.network?.blockNumber || 0}</p>
+                        <p className="text-xs text-muted-foreground">Latest Block</p>
+                      </div>
                     </div>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">Sync Status</span>
-                    <span className="text-sm font-medium text-green-600">Synced</span>
+                  
+                  <div className="glass-accent p-4 rounded-xl">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                        <span className="text-blue-500 text-xl">💰</span>
+                      </div>
+                      <div>
+                        <p className="text-2xl font-bold font-mono">{state.network?.gasPrice ? `${(Number(state.network.gasPrice) / 1e9).toFixed(1)}` : '0'}</p>
+                        <p className="text-xs text-muted-foreground">Gas Price (Gwei)</p>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">Peers</span>
-                    <span className="text-sm font-medium">8 connected</span>
+                  
+                  <div className="glass-accent p-4 rounded-xl">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-lg bg-green-500/10 flex items-center justify-center">
+                        <span className="text-green-500 text-xl">🏦</span>
+                      </div>
+                      <div>
+                        <p className="text-2xl font-bold font-mono">{state.accounts.length}</p>
+                        <p className="text-xs text-muted-foreground">Accounts</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="glass-accent p-4 rounded-xl">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center">
+                        <span className="text-purple-500 text-xl">📊</span>
+                      </div>
+                      <div>
+                        <p className="text-2xl font-bold font-mono">{state.transactions.length}</p>
+                        <p className="text-xs text-muted-foreground">Transactions</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* Main Dashboard Content */}
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+            {/* Left Column - Metrics */}
+            <div className="xl:col-span-2 space-y-6">
+              <DashboardCards />
+            </div>
+            
+            {/* Right Column - Activity */}
+            <div className="space-y-6">
+              <BlocksTable />
             </div>
           </div>
         </main>

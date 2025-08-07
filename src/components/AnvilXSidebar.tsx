@@ -43,14 +43,30 @@ const AnvilXSidebar = () => {
   }, [collapsed]);
 
   return (
-    <div className={`glass-card border-r border-border/50 transition-all duration-300 flex flex-col h-screen fixed left-0 top-0 z-50 shadow-glass ${collapsed ? 'w-16' : 'w-64'}`}>
-      {/* Collapse Toggle */}
+    <div className={`modern-card border-r border-border/50 transition-all duration-300 flex flex-col h-screen fixed left-0 top-0 z-50 ${collapsed ? 'w-16' : 'w-64'}`}>
+      {/* Header */}
       <div className="p-4 border-b border-border/50">
+        <div className="flex items-center gap-3">
+          {!collapsed && (
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-hsl(var(--dashboard-accent))/20 flex items-center justify-center">
+                <span className="text-[hsl(var(--dashboard-accent))] font-bold text-lg">A</span>
+              </div>
+              <div>
+                <h2 className="font-bold text-foreground">AnvilX</h2>
+                <p className="text-xs text-muted-foreground">Foundry Monitor</p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+      {/* Collapse Toggle */}
+      <div className="px-4 py-2">
         <Button
           variant="ghost"
           size="sm"
           onClick={() => setCollapsed(!collapsed)}
-          className="w-full justify-start"
+          className="w-full justify-start glass-accent"
         >
           <ChevronLeft className={`h-4 w-4 transition-transform ${collapsed ? 'rotate-180' : ''}`} />
           {!collapsed && <span className="ml-2 text-sm">Collapse</span>}
@@ -64,15 +80,15 @@ const AnvilXSidebar = () => {
           return (
             <Button
               key={item.label}
-              variant={isActive ? "secondary" : "ghost"}
-              className={`w-full justify-start h-11 transition-all duration-200 ${
+              variant="ghost"
+              className={`w-full justify-start h-12 transition-all duration-200 rounded-xl ${
                 isActive 
-                  ? 'bg-foreground/10 text-foreground border border-foreground/20' 
-                  : 'hover:bg-muted/50'
+                  ? 'bg-hsl(var(--dashboard-accent))/10 text-[hsl(var(--dashboard-accent))] border border-hsl(var(--dashboard-accent))/20 shadow-lg' 
+                  : 'hover:bg-muted/50 text-muted-foreground hover:text-foreground'
               }`}
               onClick={() => navigate(item.path)}
             >
-              <item.icon className={`h-5 w-5 ${getIconColor(index)}`} />
+              <item.icon className={`h-5 w-5 ${isActive ? 'text-[hsl(var(--dashboard-accent))]' : getIconColor(index)}`} />
               {!collapsed && (
                 <span className="ml-3 font-medium">{item.label}</span>
               )}
@@ -84,9 +100,11 @@ const AnvilXSidebar = () => {
       {/* Footer */}
       {!collapsed && (
         <div className="p-4 border-t border-border/50">
-          <div className="text-xs text-muted-foreground">
-            <p className="font-medium font-mono">AnvilX</p>
-            <p>Foundry Monitor</p>
+          <div className="glass-accent p-3 rounded-xl">
+            <div className="text-xs text-muted-foreground">
+              <p className="font-medium text-foreground">AnvilX v1.0</p>
+              <p className="mt-1">Foundry Monitor</p>
+            </div>
           </div>
         </div>
       )}
