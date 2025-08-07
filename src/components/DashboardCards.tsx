@@ -24,22 +24,25 @@ const MetricCard = ({ title, value, subtext, icon: Icon, gradient = false, trend
 
   return (
     <Card 
-      className="p-6 glass-card shadow-glass hover-lift cursor-pointer transition-all duration-300"
+      className="p-6 modern-card hover:shadow-premium cursor-pointer transition-all duration-300 hover:-translate-y-1"
     >
-      <div className="flex items-center justify-between mb-4">
-        <Icon className={`h-6 w-6 ${getIconColor()}`} />
+      <div className="flex items-center justify-between mb-6">
+        <div className={`p-3 rounded-xl bg-gradient-to-br from-${getIconColor().replace('icon-', '')}-100 to-${getIconColor().replace('icon-', '')}-50`}>
+          <Icon className={`h-6 w-6 ${getIconColor()}`} />
+        </div>
         {trend && (
-          <span className="text-sm font-medium text-[hsl(var(--status-online))]">
+          <div className="flex items-center gap-1 px-2 py-1 bg-green-100 text-green-700 rounded-lg text-xs font-medium">
+            <span>↗</span>
             {trend}
-          </span>
+          </div>
         )}
       </div>
       
-      <div className="space-y-2">
-        <h3 className="text-sm font-medium text-muted-foreground">
+      <div className="space-y-3">
+        <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
           {title}
         </h3>
-        <p className="text-3xl font-bold font-mono text-foreground">
+        <p className="text-3xl font-bold text-foreground">
           {value}
         </p>
         <p className="text-sm text-muted-foreground">
@@ -56,29 +59,17 @@ const DashboardCards = () => {
   if (!state.isConnected) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="p-6 glass-card border-dashed border-muted/30">
-          <div className="flex items-center justify-center h-24">
-            <div className="text-center">
-              <WifiOff className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
-              <p className="text-sm text-muted-foreground">Not connected</p>
+        {Array.from({ length: 4 }).map((_, i) => (
+          <Card key={i} className="p-6 modern-card border-dashed border-muted/50">
+            <div className="flex items-center justify-center h-32">
+              <div className="text-center">
+                <WifiOff className="h-8 w-8 text-muted-foreground mx-auto mb-3" />
+                <p className="text-sm text-muted-foreground font-medium">Connect to Node</p>
+                <p className="text-xs text-muted-foreground/70 mt-1">View real-time metrics</p>
+              </div>
             </div>
-          </div>
-        </Card>
-        <Card className="p-6 glass-card border-dashed border-muted/30">
-          <div className="flex items-center justify-center h-24">
-            <p className="text-sm text-muted-foreground">Connect to view metrics</p>
-          </div>
-        </Card>
-        <Card className="p-6 glass-card border-dashed border-muted/30">
-          <div className="flex items-center justify-center h-24">
-            <p className="text-sm text-muted-foreground">Connect to view metrics</p>
-          </div>
-        </Card>
-        <Card className="p-6 glass-card border-dashed border-muted/30">
-          <div className="flex items-center justify-center h-24">
-            <p className="text-sm text-muted-foreground">Connect to view metrics</p>
-          </div>
-        </Card>
+          </Card>
+        ))}
       </div>
     );
   }

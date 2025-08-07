@@ -9,62 +9,62 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 98%;
-    --foreground: 0 0% 5%;
+    --background: 45 23% 93%;
+    --foreground: 0 0% 12%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 5%;
+    --card: 0 0% 98%;
+    --card-foreground: 0 0% 12%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 5%;
+    --popover: 0 0% 98%;
+    --popover-foreground: 0 0% 12%;
 
-    --primary: 0 0% 5%;
+    --primary: 0 0% 15%;
     --primary-foreground: 0 0% 98%;
 
-    --secondary: 0 0% 95%;
-    --secondary-foreground: 0 0% 10%;
+    --secondary: 210 40% 88%;
+    --secondary-foreground: 0 0% 15%;
 
-    --muted: 0 0% 93%;
+    --muted: 0 0% 92%;
     --muted-foreground: 0 0% 45%;
 
-    --accent: 0 0% 90%;
-    --accent-foreground: 0 0% 10%;
+    --accent: 45 100% 80%;
+    --accent-foreground: 0 0% 15%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 0 0% 87%;
-    --input: 0 0% 93%;
-    --ring: 0 0% 40%;
+    --border: 0 0% 88%;
+    --input: 0 0% 96%;
+    --ring: 210 40% 70%;
 
-    --radius: 1rem;
+    --radius: 1.2rem;
 
-    /* Glass effects */
-    --glass-bg: hsla(0, 0%, 5%, 0.05);
-    --glass-border: hsla(0, 0%, 5%, 0.1);
-    --glass-backdrop: blur(20px);
+    /* Modern cream design effects */
+    --glass-bg: hsla(0, 0%, 100%, 0.85);
+    --glass-border: hsla(0, 0%, 85%, 0.2);
+    --glass-backdrop: blur(12px);
 
     /* Status indicators */
     --success: 142 71% 45%;
-    --warning: 38 92% 50%;
-    --info: 210 100% 72%;
+    --warning: 45 100% 60%;
+    --info: 210 100% 65%;
 
     /* Status indicators */
     --status-online: 142 71% 45%;
     --status-offline: 0 84% 60%;
-    --status-pending: 38 92% 50%;
+    --status-pending: 45 100% 60%;
 
-    /* Professional icon colors */
-    --icon-blue: 217 91% 60%;
-    --icon-green: 142 76% 36%;
-    --icon-purple: 263 70% 50%;
-    --icon-orange: 25 95% 53%;
-    --icon-red: 0 84% 60%;
-    --icon-teal: 173 80% 40%;
+    /* Professional icon colors - modern palette */
+    --icon-blue: 210 85% 55%;
+    --icon-green: 142 75% 40%;
+    --icon-purple: 270 75% 60%;
+    --icon-orange: 45 100% 60%;
+    --icon-red: 0 75% 55%;
+    --icon-teal: 180 75% 45%;
 
-    /* Shadows */
-    --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
-    --shadow-premium: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    /* Modern shadows */
+    --shadow-glass: 0 4px 24px -2px rgba(0, 0, 0, 0.12), 0 2px 8px -2px rgba(0, 0, 0, 0.08);
+    --shadow-premium: 0 8px 32px -4px rgba(0, 0, 0, 0.15), 0 4px 16px -4px rgba(0, 0, 0, 0.1);
 
     --sidebar-background: 0 0% 97%;
     --sidebar-foreground: 0 0% 10%;
@@ -134,12 +134,13 @@ All colors MUST be HSL.
     @apply bg-background text-foreground font-inter;
   }
 
-  /* Glassmorphism styles */
+  /* Modern cream card styles */
   .glass-card {
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
     backdrop-filter: var(--glass-backdrop);
     -webkit-backdrop-filter: var(--glass-backdrop);
+    border-radius: var(--radius);
   }
 
   .glass-accent {
@@ -147,6 +148,14 @@ All colors MUST be HSL.
     border: 1px solid var(--glass-border);
     backdrop-filter: var(--glass-backdrop);
     -webkit-backdrop-filter: var(--glass-backdrop);
+    border-radius: var(--radius);
+  }
+
+  .modern-card {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-glass);
   }
 
   .shadow-glass {

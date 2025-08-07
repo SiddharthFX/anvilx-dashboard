@@ -53,23 +53,33 @@ const BlocksTable = () => {
   }
 
   return (
-    <Card className="glass-card shadow-glass hover-lift">
-      <div className="p-6 border-b border-border/50">
+    <Card className="modern-card hover:shadow-premium transition-all duration-300">
+      <div className="p-6 border-b border-border/30">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-semibold font-mono text-foreground">
+            <h2 className="text-xl font-semibold text-foreground mb-1">
               Latest Blocks
             </h2>
-            <p className="text-sm text-muted-foreground mt-1">
-              Recent blocks on your node
+            <p className="text-sm text-muted-foreground">
+              Recent blocks from your Anvil node
             </p>
           </div>
-          <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={handleRefresh}>
+          <div className="flex gap-3">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={handleRefresh}
+              className="rounded-xl border-border/50 hover:bg-accent/10"
+            >
               <RefreshCw className="h-4 w-4" />
             </Button>
-            <Button variant="outline" size="sm" onClick={handleViewAllBlocks}>
-              View All Blocks
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={handleViewAllBlocks}
+              className="rounded-xl border-border/50 hover:bg-accent/10"
+            >
+              View All
               <ExternalLink className="ml-2 h-4 w-4" />
             </Button>
           </div>
