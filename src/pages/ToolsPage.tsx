@@ -253,7 +253,7 @@ const ToolsPage = () => {
         <main className="flex-1 transition-all duration-300 p-8 space-y-8" style={{ marginLeft: 'var(--sidebar-width, 256px)' }}>
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold font-space-grotesk text-foreground">
+              <h1 className="text-3xl font-bold font-mono text-foreground">
                 Anvil Tools
               </h1>
               <p className="text-muted-foreground mt-1">
@@ -278,7 +278,7 @@ const ToolsPage = () => {
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Tools List */}
             <div className="lg:col-span-2 space-y-6">
-              <h2 className="text-xl font-semibold font-space-grotesk">Available Tools</h2>
+              <h2 className="text-xl font-semibold font-mono">Available Tools</h2>
               
               <div className="grid gap-4">
                 {tools.map((tool) => (
@@ -312,7 +312,7 @@ const ToolsPage = () => {
 
             {/* Tool Interface */}
             <div className="space-y-6">
-              <h2 className="text-xl font-semibold font-space-grotesk">Tool Interface</h2>
+              <h2 className="text-xl font-semibold font-mono">Tool Interface</h2>
               
               {selectedTool ? (
                 <Card className="p-6">

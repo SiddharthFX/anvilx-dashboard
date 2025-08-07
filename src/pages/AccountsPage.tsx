@@ -49,7 +49,7 @@ const AccountsPage = () => {
         <main className="flex-1 transition-all duration-300 p-8 space-y-8" style={{ marginLeft: 'var(--sidebar-width, 256px)' }}>
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold font-space-grotesk text-foreground">
+              <h1 className="text-3xl font-bold font-mono text-foreground">
                 Accounts
               </h1>
               <p className="text-muted-foreground mt-1">

@@ -22,7 +22,7 @@ const BlocksPage = () => {
     totalBlocks: state.blocks.length,
     avgBlockTime: "12.0s",
     avgGasUsed: state.blocks.length > 0 ? 
-      (state.blocks.reduce((acc, block) => acc + parseFloat(block.gasUsed), 0) / state.blocks.length).toFixed(0) : "0",
+      (state.blocks.reduce((acc, block) => acc + parseFloat(block.gasUsed), 0) / state.blocks.length / 1000000).toFixed(2) : "0",
     latestBlock: state.network?.blockNumber || 0,
   };
 
@@ -107,7 +107,7 @@ const BlocksPage = () => {
                 <Fuel className="h-8 w-8 icon-orange" />
                 <div>
                   <p className="text-muted-foreground text-sm font-medium">Avg Gas Used</p>
-                  <p className="text-2xl font-bold font-mono text-foreground">{stats.avgGasUsed} Gwei</p>
+                  <p className="text-2xl font-bold font-mono text-foreground">{stats.avgGasUsed}M</p>
                 </div>
               </div>
             </Card>
@@ -198,9 +198,9 @@ const BlocksPage = () => {
                         </TableCell>
                         <TableCell>
                           <div className="space-y-1">
-                            <div className="font-mono text-sm">{parseFloat(block.gasUsed).toFixed(2)} Gwei</div>
+                            <div className="font-mono text-sm">{(parseFloat(block.gasUsed) / 1000000).toFixed(2)}M</div>
                             <div className="text-xs text-muted-foreground">
-                              of {parseFloat(block.gasLimit).toFixed(2)} Gwei
+                              of {(parseFloat(block.gasLimit) / 1000000).toFixed(2)}M
                             </div>
                           </div>
                         </TableCell>

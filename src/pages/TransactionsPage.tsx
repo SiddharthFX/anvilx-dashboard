@@ -227,7 +227,7 @@ const TransactionsPage = () => {
                         </TableCell>
                         <TableCell>
                           <div className="space-y-1">
-                            <div className="font-mono text-sm">{parseFloat(tx.gasUsed).toFixed(2)} Gwei</div>
+                            <div className="font-mono text-sm">{(parseFloat(tx.gasUsed) / 1000000).toFixed(4)}M</div>
                             <div className="text-xs text-muted-foreground">{parseFloat(tx.gasPrice).toFixed(2)} gwei</div>
                           </div>
                         </TableCell>

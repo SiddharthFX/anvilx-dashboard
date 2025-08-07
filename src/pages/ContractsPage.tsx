@@ -104,7 +104,7 @@ const ContractsPage = () => {
         <main className="flex-1 transition-all duration-300 p-8 space-y-8" style={{ marginLeft: 'var(--sidebar-width, 256px)' }}>
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold font-space-grotesk text-foreground">
+              <h1 className="text-3xl font-bold font-mono text-foreground">
                 Smart Contracts
               </h1>
               <p className="text-muted-foreground mt-1">
@@ -205,7 +205,7 @@ const ContractsPage = () => {
             /* Contracts Table */
             <Card className="glass-card shadow-glass">
             <div className="p-6 border-b border-border">
-              <h2 className="text-xl font-semibold font-space-grotesk">Deployed Contracts</h2>
+              <h2 className="text-xl font-semibold font-mono">Deployed Contracts</h2>
               <p className="text-muted-foreground text-sm mt-1">
                 Showing {filteredContracts.length} contracts
               </p>
