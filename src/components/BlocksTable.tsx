@@ -1,117 +1,146 @@
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Copy, ExternalLink, Clock, Hash } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { ExternalLink, Clock, WifiOff, RefreshCw } from "lucide-react";
 import { useAnvil } from "@/contexts/AnvilContext";
+import { useNavigate } from "react-router-dom";
+
+const formatTimestamp = (timestamp: number) => {
+  const now = Date.now() / 1000;
+  const diff = now - timestamp;
+  
+  if (diff < 60) return `${Math.floor(diff)}s ago`;
+  if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+  if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
+  return `${Math.floor(diff / 86400)}d ago`;
+};
 
 const BlocksTable = () => {
-  const { state } = useAnvil();
-  const { toast } = useToast();
+  const { state, refreshData } = useAnvil();
+  const navigate = useNavigate();
 
-  const copyToClipboard = (text: string, label: string) => {
-    navigator.clipboard.writeText(text);
-    toast({
-      title: "Copied!",
-      description: `${label} copied to clipboard`,
-    });
+  const handleViewAllBlocks = () => {
+    navigate('/blocks');
   };
 
-  const formatTimestamp = (timestamp: number) => {
-    return new Date(timestamp * 1000).toLocaleTimeString();
+  const handleRefresh = () => {
+    refreshData();
   };
 
-  return (
-    <div className="modern-card animate-slide-up" style={{ animationDelay: "400ms" }}>
-      <div className="p-6 border-b border-border/50">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center">
-              <Hash className="h-4 w-4 text-purple-500" />
-            </div>
+  if (!state.isConnected) {
+    return (
+      <Card className="glass-card shadow-glass">
+        <div className="p-6 border-b border-border/50">
+          <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-semibold">Recent Blocks</h2>
-              <p className="text-sm text-muted-foreground">
-                Latest blockchain activity
+              <h2 className="text-xl font-semibold font-mono text-foreground">
+                Latest Blocks
+              </h2>
+              <p className="text-sm text-muted-foreground mt-1">
+                Recent blocks on your node
               </p>
             </div>
           </div>
-          <Badge variant="outline" className="bg-blue-500/10 text-blue-500 border-blue-500/20">
-            {state.blocks.length} blocks
-          </Badge>
+        </div>
+        <div className="p-12 text-center">
+          <WifiOff className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+          <p className="text-muted-foreground">Not connected to node</p>
+          <p className="text-sm text-muted-foreground mt-1">
+            Connect to view blocks
+          </p>
+        </div>
+      </Card>
+    );
+  }
+
+  return (
+    <Card className="glass-card shadow-glass hover-lift">
+      <div className="p-6 border-b border-border/50">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-xl font-semibold font-mono text-foreground">
+              Latest Blocks
+            </h2>
+            <p className="text-sm text-muted-foreground mt-1">
+              Recent blocks on your node
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" onClick={handleRefresh}>
+              <RefreshCw className="h-4 w-4" />
+            </Button>
+            <Button variant="outline" size="sm" onClick={handleViewAllBlocks}>
+              View All Blocks
+              <ExternalLink className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
         </div>
       </div>
 
-      <div className="p-6">
-        {!state.isConnected ? (
-          <div className="text-center py-12">
-            <Clock className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-foreground mb-2">No Connection</h3>
-            <p className="text-muted-foreground">
-              Connect to your Anvil node to view blocks
-            </p>
-          </div>
-        ) : state.blocks.length === 0 ? (
-          <div className="text-center py-12">
-            <Hash className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-foreground mb-2">No Blocks Found</h3>
-            <p className="text-muted-foreground">
-              Waiting for blockchain activity...
-            </p>
+      <div className="overflow-x-auto">
+        {state.blocks.length === 0 ? (
+          <div className="p-8 text-center">
+            <p className="text-muted-foreground">No blocks available</p>
           </div>
         ) : (
-          <div className="space-y-3">
-            {state.blocks.slice(0, 5).map((block, index) => (
-              <div key={block.hash} className="glass-accent p-4 rounded-xl hover-lift">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-lg bg-hsl(var(--dashboard-accent))/10 flex items-center justify-center">
-                      <span className="text-[hsl(var(--dashboard-accent))] font-mono font-bold text-sm">
-                        #{block.number}
-                      </span>
-                    </div>
-                    
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2">
-                        <code className="text-sm font-mono text-foreground">
-                          {block.hash.slice(0, 8)}...{block.hash.slice(-6)}
-                        </code>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => copyToClipboard(block.hash, "Block hash")}
-                          className="h-6 w-6 p-0"
-                        >
-                          <Copy className="h-3 w-3" />
-                        </Button>
-                      </div>
-                      
-                      <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                        <span>{formatTimestamp(block.timestamp)}</span>
-                        <span>•</span>
-                        <span>{state.transactions.filter(tx => tx.blockNumber === block.number).length} transactions</span>
-                        <span>•</span>
-                        <span>{(Number(block.gasUsed) / 1000000).toFixed(2)}M gas</span>
-                      </div>
-                    </div>
-                  </div>
-
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-border">
+                <th className="text-left p-4 text-sm font-medium text-muted-foreground">Block</th>
+                <th className="text-left p-4 text-sm font-medium text-muted-foreground">
                   <div className="flex items-center gap-2">
-                    <Badge variant="outline" className="text-xs">
-                      {(Number(block.gasUsed) / Number(block.gasLimit) * 100).toFixed(1)}% full
-                    </Badge>
-                    <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
-                      <ExternalLink className="h-3 w-3" />
-                    </Button>
+                    <Clock className="h-4 w-4" />
+                    Age
                   </div>
-                </div>
-              </div>
-            ))}
-          </div>
+                </th>
+                <th className="text-left p-4 text-sm font-medium text-muted-foreground">Txns</th>
+                <th className="text-left p-4 text-sm font-medium text-muted-foreground">Miner</th>
+                <th className="text-left p-4 text-sm font-medium text-muted-foreground">Gas Used</th>
+                <th className="text-left p-4 text-sm font-medium text-muted-foreground">Hash</th>
+              </tr>
+            </thead>
+            <tbody>
+              {state.blocks.slice(0, 5).map((block) => (
+                <tr 
+                  key={block.number} 
+                  className="border-b border-border hover:bg-secondary/50 transition-colors cursor-pointer"
+                  onClick={() => navigate(`/blocks`)}
+                >
+                  <td className="p-4">
+                    <div className="font-mono text-sm font-medium text-primary">
+                      #{block.number.toLocaleString()}
+                    </div>
+                  </td>
+                  <td className="p-4">
+                    <span className="text-sm text-muted-foreground">
+                      {formatTimestamp(block.timestamp)}
+                    </span>
+                  </td>
+                  <td className="p-4">
+                    <span className="text-sm font-medium">{block.txCount}</span>
+                  </td>
+                  <td className="p-4">
+                    <span className="font-mono text-sm text-muted-foreground">
+                      {block.miner.slice(0, 10)}...{block.miner.slice(-6)}
+                    </span>
+                  </td>
+                  <td className="p-4">
+                    <div className="flex flex-col">
+                      <span className="text-sm font-medium">{parseFloat(block.gasUsed).toFixed(2)} Gwei</span>
+                      <span className="text-xs text-muted-foreground">of {parseFloat(block.gasLimit).toFixed(2)} Gwei</span>
+                    </div>
+                  </td>
+                  <td className="p-4">
+                    <span className="font-mono text-sm text-muted-foreground">
+                      {block.hash.slice(0, 10)}...{block.hash.slice(-6)}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         )}
       </div>
-    </div>
+    </Card>
   );
 };
 
