@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ReactNode } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,11 +7,19 @@ import { Settings, Plug, AlertTriangle, CheckCircle } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { useAnvil } from "@/contexts/AnvilContext";
 
-const ConnectionModal = () => {
-  const { state, connect, disconnect, setRpcUrl: setContextRpcUrl, setPrivateKey: setContextPrivateKey } = useAnvil();
+type ConnectionModalProps = {
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  showTrigger?: boolean;
+  trigger?: ReactNode;
+};
+const ConnectionModal = ({ open, onOpenChange, showTrigger = true, trigger }: ConnectionModalProps) => {
+  const { state, connect, disconnect } = useAnvil();
   const [localRpcUrl, setLocalRpcUrl] = useState(state.rpcUrl);
   const [localPrivateKey, setLocalPrivateKey] = useState(state.privateKey);
-  const [isOpen, setIsOpen] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
+  const isOpen = open !== undefined ? open : internalOpen;
+  const setIsOpen = onOpenChange ?? setInternalOpen;
 
   useEffect(() => {
     setLocalRpcUrl(state.rpcUrl);
@@ -40,16 +48,22 @@ const ConnectionModal = () => {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button variant="outline" className="hover:bg-secondary">
-          {state.isConnected ? (
-            <CheckCircle className="mr-2 h-4 w-4 text-success" />
+      {showTrigger && (
+        <DialogTrigger asChild>
+          {trigger ? (
+            trigger
           ) : (
-            <Settings className="mr-2 h-4 w-4" />
+            <Button variant="outline" className="hover:bg-secondary">
+              {state.isConnected ? (
+                <CheckCircle className="mr-2 h-4 w-4 text-success" />
+              ) : (
+                <Settings className="mr-2 h-4 w-4" />
+              )}
+              {state.isConnected ? 'Connected' : 'Connection Settings'}
+            </Button>
           )}
-          {state.isConnected ? 'Connected' : 'Connection Settings'}
-        </Button>
-      </DialogTrigger>
+        </DialogTrigger>
+      )}
       
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
