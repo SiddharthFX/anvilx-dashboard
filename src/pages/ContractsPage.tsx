@@ -9,70 +9,97 @@ import { Search, FileCode, Eye, Copy, ExternalLink } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useAnvil } from "@/contexts/AnvilContext";
+import { ethers } from "ethers";
+import { useNavigate } from "react-router-dom";
 
-// Sample deployed contracts on Anvil
-const deployedContracts = [
-  {
-    address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
-    name: "SimpleStorage",
-    deployer: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-    deploymentTx: "0x123...abc",
-    blockNumber: 2,
-    timestamp: new Date(Date.now() - 3600000).toLocaleString(),
-    verified: true,
-    type: "Storage Contract",
-    bytecode: "0x608060405234801561001057600080fd5b5061012c806100206000396000f3fe6080604052348015600f57600080fd5b506004361060325760003560e01c80632e64cec11460375780636057361d14604c575b600080fd5b60005460405190815260200160405180910390f35b605c6057366004605e565b600055565b005b600080fd5b60008060408385031215607057600080fd5b50359250602001356040850152565b00fea26469706673582212208a",
-  },
-  {
-    address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
-    name: "ERC20Token",
-    deployer: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
-    deploymentTx: "0x456...def",
-    blockNumber: 5,
-    timestamp: new Date(Date.now() - 7200000).toLocaleString(),
-    verified: true,
-    type: "ERC-20 Token",
-    bytecode: "0x608060405234801561001057600080fd5b5060405161080638038061080683398101604081905261002f916100be565b600061003b838261015c565b50600161004883826101...",
-  },
-  {
-    address: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
-    name: "Marketplace",
-    deployer: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
-    deploymentTx: "0x789...ghi",
-    blockNumber: 8,
-    timestamp: new Date(Date.now() - 10800000).toLocaleString(),
-    verified: false,
-    type: "NFT Marketplace",
-    bytecode: "0x6080604052348015600f57600080fd5b50600436106100cf5760003560e01c80636352211e1161008c5780636352211e1461...",
-  },
-  {
-    address: "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
-    name: "Governance",
-    deployer: "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
-    deploymentTx: "0xabc...jkl",
-    blockNumber: 12,
-    timestamp: new Date(Date.now() - 14400000).toLocaleString(),
-    verified: true,
-    type: "DAO Governance",
-    bytecode: "0x608060405234801561001057600080fd5b50600436106101735760003560e01c80636fcfff45116100de5780636fcfff45...",
-  },
-];
+// Real-time contracts will be discovered by scanning recent blocks
+
 
 const ContractsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [contracts, setContracts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const { state } = useAnvil();
   const isConnected = state.isConnected;
+  const navigate = useNavigate();
 
-  // For now, show sample contracts when connected
+  // Scan recent blocks for contract creation transactions
   useEffect(() => {
-    if (isConnected) {
-      setContracts(deployedContracts);
-    } else {
-      setContracts([]);
-    }
-  }, [isConnected]);
+    const scanContracts = async () => {
+      if (!state.provider || !isConnected) {
+        setContracts([]);
+        return;
+      }
+      setLoading(true);
+      try {
+        const provider = state.provider as ethers.JsonRpcProvider;
+        const latest = await provider.getBlockNumber();
+        const from = Math.max(0, latest - 249); // scan last 250 blocks
+        const results: any[] = [];
+
+        // Batch fetch blocks with transactions
+        const batchSize = 10;
+        for (let start = latest; start >= from; start -= batchSize) {
+          const end = Math.max(from, start - batchSize + 1);
+          const promises: Promise<ethers.Block | null>[] = [] as any;
+          for (let b = start; b >= end; b--) {
+            promises.push(provider.getBlock(b, true));
+          }
+          const blocks = await Promise.all(promises);
+          for (const block of blocks) {
+            if (!block) continue;
+            const txs = block.transactions;
+            for (const txHash of txs) {
+              if (typeof txHash !== 'string') continue;
+              const tx = await provider.getTransaction(txHash);
+              if (!tx) continue;
+              if (tx.to === null) {
+                // Contract creation
+                try {
+                  const receipt = await provider.getTransactionReceipt(tx.hash);
+                  if (!receipt) continue;
+                  const contractAddr = receipt.contractAddress;
+                  if (!contractAddr) continue;
+                  // Ensure code exists
+                  const code = await provider.getCode(contractAddr);
+                  if (!code || code === '0x') continue;
+                  results.push({
+                    address: contractAddr,
+                    name: 'Unknown',
+                    deployer: tx.from,
+                    deploymentTx: tx.hash,
+                    blockNumber: receipt.blockNumber,
+                    timestamp: new Date((block.timestamp || 0) * 1000).toLocaleString(),
+                    verified: false,
+                    type: 'Contract',
+                  });
+                } catch (e) {
+                  console.warn('Scan error', e);
+                }
+              }
+            }
+          }
+        }
+        // Deduplicate by address (latest first)
+        const seen = new Set<string>();
+        const unique = results.filter((c) => {
+          if (seen.has(c.address)) return false;
+          seen.add(c.address);
+          return true;
+        });
+        setContracts(unique);
+      } catch (err) {
+        console.error(err);
+        toast({ title: 'Scan failed', description: err instanceof Error ? err.message : 'Unknown error', variant: 'destructive' });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    scanContracts();
+    // re-scan when new blocks fetched by context
+  }, [isConnected, state.provider, state.blocks]);
 
   const filteredContracts = contracts.filter(contract => 
     contract.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -120,9 +147,9 @@ const ContractsPage = () => {
                 <Eye className="mr-2 h-4 w-4" />
                 Verify Contract
               </Button>
-              <Button 
+<Button 
                 className="bg-primary hover:bg-primary/90 text-primary-foreground"
-                onClick={() => toast({ title: "Coming Soon", description: "Contract deployment feature is in development" })}
+                onClick={() => navigate('/playground')}
               >
                 <FileCode className="mr-2 h-4 w-4" />
                 Deploy Contract

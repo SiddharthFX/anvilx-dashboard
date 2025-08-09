@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Settings, Bell, User, RefreshCcw, Plug, LogOut, UserCircle2 } from "lucide-react";
+import { Settings, Bell, User, RefreshCcw, Plug, LogOut, UserCircle2, FileCode } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -55,9 +55,15 @@ const AnvilXNavbar = () => {
               </TooltipTrigger>
               <TooltipContent side="bottom">Settings</TooltipContent>
             </Tooltip>
-            <DropdownMenuContent align="end" className="min-w-56">
+<DropdownMenuContent align="end" className="min-w-56">
               <DropdownMenuLabel>Quick actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link to="/playground">
+                  <FileCode className="mr-2 h-4 w-4" />
+                  Smart Contract Playground
+                </Link>
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setConnOpen(true)}>
                 <Plug className="mr-2 h-4 w-4" />
                 Node Connection…
