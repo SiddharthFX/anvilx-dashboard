@@ -1,0 +1,105 @@
+name: Build AnvilX Dashboard
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  release:
+    types: [ published ]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        platform: [macos-latest, ubuntu-latest, windows-latest]
+    
+    runs-on: ${{ matrix.platform }}
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Setup Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        target: ${{ matrix.platform == 'windows-latest' && 'x86_64-pc-windows-msvc' || matrix.platform == 'macos-latest' && 'universal-apple-darwin' || 'x86_64-unknown-linux-gnu' }}
+        
+    - name: Install dependencies (macOS)
+      if: matrix.platform == 'macos-latest'
+      run: |
+        xcode-select --install || true
+        npm ci
+        
+    - name: Install dependencies (Ubuntu)
+      if: matrix.platform == 'ubuntu-latest'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libwebkit2gtk-4.0-dev libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev
+        npm ci
+        
+    - name: Install dependencies (Windows)
+      if: matrix.platform == 'windows-latest'
+      run: |
+        npm ci
+        
+    - name: Generate icons
+      run: node scripts/generate-icons.js
+      
+    - name: Build application
+      run: npm run tauri:build
+      
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: anvilx-dashboard-${{ matrix.platform }}
+        path: |
+          src-tauri/target/release/bundle/
+          src-tauri/target/universal-apple-darwin/release/bundle/
+        retention-days: 30
+        
+    - name: Create release
+      if: github.event_name == 'release'
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: AnvilX Dashboard v${{ github.ref_name }}
+        body: |
+          ## 🎉 AnvilX Dashboard Release
+          
+          ### 📦 Downloads
+          
+          **macOS (Universal):**
+          - [AnvilX Dashboard.app](https://github.com/${{ github.repository }}/releases/download/${{ github.ref }}/anvilx-dashboard-macos-latest.zip)
+          
+          **Windows:**
+          - [AnvilX Dashboard.msi](https://github.com/${{ github.repository }}/releases/download/${{ github.ref }}/anvilx-dashboard-windows-latest.zip)
+          
+          **Linux:**
+          - [AnvilX Dashboard.AppImage](https://github.com/${{ github.repository }}/releases/download/${{ github.ref }}/anvilx-dashboard-ubuntu-latest.zip)
+          
+          ### ✨ Features
+          - Custom AnvilX branding and icons
+          - Redesigned Accounts page with modern UI
+          - Responsive private key display
+          - Native desktop performance
+          - Cross-platform compatibility
+          
+          ### 🔧 System Requirements
+          - **macOS**: 10.15+ (Intel & Apple Silicon)
+          - **Windows**: Windows 10/11 (x64)
+          - **Linux**: Ubuntu 18.04+, Debian 10+, or compatible (x64)
+          
+          ---
+          Built with ❤️ by AnvilX Team
+        draft: false
+        prerelease: false

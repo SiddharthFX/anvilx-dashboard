@@ -54,13 +54,13 @@ const BlocksTable = () => {
 
   return (
     <Card className="glass-card shadow-glass hover-lift">
-      <div className="p-6 border-b border-border/50">
-        <div className="flex items-center justify-between">
+      <div className="p-4 sm:p-6 border-b border-border/50">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h2 className="text-xl font-semibold font-mono text-foreground">
+            <h2 className="text-lg sm:text-xl font-semibold font-mono text-foreground">
               Latest Blocks
             </h2>
-            <p className="text-sm text-muted-foreground mt-1">
+            <p className="text-xs sm:text-sm text-muted-foreground mt-1">
               Recent blocks on your node
             </p>
           </div>
@@ -68,8 +68,12 @@ const BlocksTable = () => {
             <Button variant="outline" size="sm" onClick={handleRefresh}>
               <RefreshCw className="h-4 w-4" />
             </Button>
-            <Button variant="outline" size="sm" onClick={handleViewAllBlocks}>
+            <Button variant="outline" size="sm" onClick={handleViewAllBlocks} className="hidden sm:flex">
               View All Blocks
+              <ExternalLink className="ml-2 h-4 w-4" />
+            </Button>
+            <Button variant="outline" size="sm" onClick={handleViewAllBlocks} className="sm:hidden">
+              View All
               <ExternalLink className="ml-2 h-4 w-4" />
             </Button>
           </div>
@@ -85,17 +89,17 @@ const BlocksTable = () => {
           <table className="w-full">
             <thead>
               <tr className="border-b border-border">
-                <th className="text-left p-4 text-sm font-medium text-muted-foreground">Block</th>
-                <th className="text-left p-4 text-sm font-medium text-muted-foreground">
+                <th className="text-left p-2 sm:p-4 text-xs sm:text-sm font-medium text-muted-foreground">Block</th>
+                <th className="text-left p-2 sm:p-4 text-xs sm:text-sm font-medium text-muted-foreground hidden sm:table-cell">
                   <div className="flex items-center gap-2">
                     <Clock className="h-4 w-4" />
                     Age
                   </div>
                 </th>
-                <th className="text-left p-4 text-sm font-medium text-muted-foreground">Txns</th>
-                <th className="text-left p-4 text-sm font-medium text-muted-foreground">Miner</th>
-                <th className="text-left p-4 text-sm font-medium text-muted-foreground">Gas Used</th>
-                <th className="text-left p-4 text-sm font-medium text-muted-foreground">Hash</th>
+                <th className="text-left p-2 sm:p-4 text-xs sm:text-sm font-medium text-muted-foreground">Txns</th>
+                <th className="text-left p-2 sm:p-4 text-xs sm:text-sm font-medium text-muted-foreground hidden lg:table-cell">Miner</th>
+                <th className="text-left p-2 sm:p-4 text-xs sm:text-sm font-medium text-muted-foreground hidden md:table-cell">Gas Used</th>
+                <th className="text-left p-2 sm:p-4 text-xs sm:text-sm font-medium text-muted-foreground hidden xl:table-cell">Hash</th>
               </tr>
             </thead>
             <tbody>
@@ -105,32 +109,32 @@ const BlocksTable = () => {
                   className="border-b border-border hover:bg-secondary/50 transition-colors cursor-pointer"
                   onClick={() => navigate(`/blocks`)}
                 >
-                  <td className="p-4">
-                    <div className="font-mono text-sm font-medium text-primary">
+                  <td className="p-2 sm:p-4">
+                    <div className="font-mono text-xs sm:text-sm font-medium text-primary">
                       #{block.number.toLocaleString()}
                     </div>
                   </td>
-                  <td className="p-4">
-                    <span className="text-sm text-muted-foreground">
+                  <td className="p-2 sm:p-4 hidden sm:table-cell">
+                    <span className="text-xs sm:text-sm text-muted-foreground">
                       {formatTimestamp(block.timestamp)}
                     </span>
                   </td>
-                  <td className="p-4">
-                    <span className="text-sm font-medium">{block.txCount}</span>
+                  <td className="p-2 sm:p-4">
+                    <span className="text-xs sm:text-sm font-medium">{block.txCount}</span>
                   </td>
-                  <td className="p-4">
-                    <span className="font-mono text-sm text-muted-foreground">
+                  <td className="p-2 sm:p-4 hidden lg:table-cell">
+                    <span className="font-mono text-xs sm:text-sm text-muted-foreground">
                       {block.miner.slice(0, 10)}...{block.miner.slice(-6)}
                     </span>
                   </td>
-                  <td className="p-4">
+                  <td className="p-2 sm:p-4 hidden md:table-cell">
                     <div className="flex flex-col">
-                      <span className="text-sm font-medium">{parseFloat(block.gasUsed).toFixed(2)} Gwei</span>
+                      <span className="text-xs sm:text-sm font-medium">{parseFloat(block.gasUsed).toFixed(2)} Gwei</span>
                       <span className="text-xs text-muted-foreground">of {parseFloat(block.gasLimit).toFixed(2)} Gwei</span>
                     </div>
                   </td>
-                  <td className="p-4">
-                    <span className="font-mono text-sm text-muted-foreground">
+                  <td className="p-2 sm:p-4 hidden xl:table-cell">
+                    <span className="font-mono text-xs sm:text-sm text-muted-foreground">
                       {block.hash.slice(0, 10)}...{block.hash.slice(-6)}
                     </span>
                   </td>

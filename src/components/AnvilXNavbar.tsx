@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Settings, Bell, User, RefreshCcw, Plug, LogOut, UserCircle2, FileCode } from "lucide-react";
+import { Settings, Bell, User, RefreshCcw, Plug, LogOut, UserCircle2, FileCode, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -13,13 +13,29 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Link } from "react-router-dom";
 import ConnectionModal from "@/components/ConnectionModal";
 import { useAnvil } from "@/contexts/AnvilContext";
+import { useSidebar } from "@/contexts/SidebarContext";
 
 const AnvilXNavbar = () => {
   const [connOpen, setConnOpen] = useState(false);
   const { state, disconnect, refreshData } = useAnvil();
+  const { isCollapsed, setIsCollapsed, isMobile } = useSidebar();
 
   return (
-    <nav className="h-16 glass-card border-b border-border/50 flex items-center justify-end px-6 shadow-glass">
+    <nav className="h-16 glass-card border-b border-border/50 flex items-center justify-between px-4 sm:px-6 shadow-glass">
+      {/* Mobile Menu Button */}
+      <Button
+        variant="ghost"
+        size="sm"
+        className="lg:hidden h-9 w-9"
+        onClick={() => setIsCollapsed(!isCollapsed)}
+        aria-label="Toggle mobile menu"
+      >
+        <Menu className="h-4 w-4" />
+      </Button>
+
+      {/* Spacer for desktop */}
+      <div className="hidden lg:block flex-1"></div>
+
       <TooltipProvider>
         <div className="flex items-center gap-2">
           {/* Notifications */}
@@ -58,12 +74,7 @@ const AnvilXNavbar = () => {
 <DropdownMenuContent align="end" className="min-w-56">
               <DropdownMenuLabel>Quick actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem asChild>
-                <Link to="/playground">
-                  <FileCode className="mr-2 h-4 w-4" />
-                  Smart Contract Playground
-                </Link>
-              </DropdownMenuItem>
+
               <DropdownMenuItem onClick={() => setConnOpen(true)}>
                 <Plug className="mr-2 h-4 w-4" />
                 Node Connection…

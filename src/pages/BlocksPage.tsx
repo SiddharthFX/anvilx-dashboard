@@ -5,13 +5,14 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Search, Clock, Blocks, Fuel, Users, WifiOff } from "lucide-react";
+import { Search, Clock, Blocks, Fuel, Users, WifiOff, RefreshCw } from "lucide-react";
 import { useState } from "react";
 import { useAnvil } from "@/contexts/AnvilContext";
 
 const BlocksPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const { state } = useAnvil();
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const { state, refreshData } = useAnvil();
 
   const filteredBlocks = state.blocks.filter(block => 
     block.number.toString().includes(searchTerm) ||
@@ -20,7 +21,8 @@ const BlocksPage = () => {
 
   const stats = {
     totalBlocks: state.blocks.length,
-    avgBlockTime: "12.0s",
+    avgBlockTime: state.blocks.length > 1 ? 
+      ((state.blocks[0].timestamp - state.blocks[state.blocks.length - 1].timestamp) / (state.blocks.length - 1)).toFixed(1) + "s" : "12.0s",
     avgGasUsed: state.blocks.length > 0 ? 
       (state.blocks.reduce((acc, block) => acc + parseFloat(block.gasUsed), 0) / state.blocks.length / 1000000).toFixed(2) : "0",
     latestBlock: state.network?.blockNumber || 0,
@@ -34,13 +36,13 @@ const BlocksPage = () => {
         <div className="flex">
           <AnvilXSidebar />
           
-          <main className="flex-1 transition-all duration-300 p-8 space-y-8" style={{ marginLeft: 'var(--sidebar-width, 256px)' }}>
-            <div className="flex items-center justify-between">
+          <main className="flex-1 transition-all duration-300 p-4 sm:p-6 lg:p-8 space-y-4 sm:space-y-6 lg:space-y-8" style={{ marginLeft: 'var(--sidebar-width, 256px)' }}>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
-                <h1 className="text-3xl font-bold font-mono text-foreground">
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold font-mono text-foreground">
                   Blocks Explorer
                 </h1>
-                <p className="text-muted-foreground mt-1">
+                <p className="text-sm sm:text-base text-muted-foreground mt-1">
                   Browse and search through Anvil blockchain blocks
                 </p>
               </div>
@@ -78,10 +80,22 @@ const BlocksPage = () => {
                 Browse and search through Anvil blockchain blocks
               </p>
             </div>
+            <Button 
+              variant="outline" 
+              onClick={async () => {
+                setIsRefreshing(true);
+                await refreshData();
+                setIsRefreshing(false);
+              }}
+              disabled={isRefreshing}
+            >
+              <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
+              Refresh
+            </Button>
           </div>
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             <Card className="p-6 glass-card shadow-glass hover-lift">
               <div className="flex items-center gap-3">
                 <Blocks className="h-8 w-8 icon-blue" />

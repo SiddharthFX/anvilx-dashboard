@@ -15,14 +15,14 @@ const Index = () => {
         <AnvilXSidebar />
         
         {/* Main Content */}
-        <main className="flex-1 transition-all duration-300 p-8 space-y-8" style={{ marginLeft: 'var(--sidebar-width, 256px)' }}>
+        <main className="flex-1 transition-all duration-300 p-4 sm:p-6 lg:p-8 space-y-4 sm:space-y-6 lg:space-y-8" style={{ marginLeft: 'var(--sidebar-width, 256px)' }}>
           {/* Header Section */}
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <h1 className="text-3xl font-bold font-mono text-foreground">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold font-mono text-foreground">
                 AnvilX Dashboard
               </h1>
-              <p className="text-muted-foreground mt-1">
+              <p className="text-sm sm:text-base text-muted-foreground mt-1">
                 Foundry Anvil Node Monitor
               </p>
             </div>

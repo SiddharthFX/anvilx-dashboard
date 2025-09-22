@@ -24,7 +24,7 @@ const MetricCard = ({ title, value, subtext, icon: Icon, gradient = false, trend
 
   return (
     <Card 
-      className="p-6 glass-card shadow-glass hover-lift cursor-pointer transition-all duration-300"
+      className="p-4 sm:p-6 glass-card shadow-glass hover-lift cursor-pointer transition-all duration-300"
     >
       <div className="flex items-center justify-between mb-4">
         <Icon className={`h-6 w-6 ${getIconColor()}`} />
@@ -36,13 +36,13 @@ const MetricCard = ({ title, value, subtext, icon: Icon, gradient = false, trend
       </div>
       
       <div className="space-y-2">
-        <h3 className="text-sm font-medium text-muted-foreground">
+        <h3 className="text-xs sm:text-sm font-medium text-muted-foreground">
           {title}
         </h3>
-        <p className="text-3xl font-bold font-mono text-foreground">
+        <p className="text-2xl sm:text-3xl font-bold font-mono text-foreground">
           {value}
         </p>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-xs sm:text-sm text-muted-foreground">
           {subtext}
         </p>
       </div>
@@ -55,7 +55,7 @@ const DashboardCards = () => {
 
   if (!state.isConnected) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         <Card className="p-6 glass-card border-dashed border-muted/30">
           <div className="flex items-center justify-center h-24">
             <div className="text-center">
@@ -84,7 +84,7 @@ const DashboardCards = () => {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
       <MetricCard
         title="Current Block"
         value={state.network?.blockNumber.toLocaleString() || "0"}
